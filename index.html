@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PROTECT THE EARTH – Interactive Presentation</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Nunito:wght@400;600;700;800;900&display=swap');
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  :root {
+    --green: #00e676;
+    --blue: #00bcd4;
+    --yellow: #ffeb3b;
+    --orange: #ff6d00;
+    --red: #ff1744;
+    --dark: #060d0a;
+    --card: rgba(255,255,255,0.06);
+    --glow-green: 0 0 30px #00e67688;
+    --glow-blue: 0 0 30px #00bcd488;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--dark);
+    color: #fff;
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+    user-select: none;
+  }
+
+  /* ── PARTICLES ── */
+  #particles {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    overflow: hidden;
+  }
+  .particle {
+    position: absolute;
+    border-radius: 50%;
+    animation: float linear infinite;
+    opacity: 0;
+  }
+  @keyframes float {
+    0%   { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+    10%  { opacity: 0.6; }
+    90%  { opacity: 0.4; }
+    100% { transform: translateY(-20vh) rotate(720deg); opacity: 0; }
+  }
+
+  /* ── SLIDES CONTAINER ── */
+  #slides { position: relative; z-index: 1; width: 100%; height: 100%; }
+
+  .slide {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 2rem;
+    opacity: 0;
+    transform: scale(0.92) translateY(40px);
+    pointer-events: none;
+    transition: opacity 0.7s cubic-bezier(.4,0,.2,1),
+                transform 0.7s cubic-bezier(.4,0,.2,1);
+  }
+  .slide.active {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    pointer-events: all;
+  }
+
+  /* ── NAV ── */
+  #nav {
+    position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%);
+    display: flex; align-items: center; gap: 1rem;
+    z-index: 100;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 50px;
+    padding: 0.5rem 1.2rem;
+  }
+  .nav-btn {
+    background: none; border: none; color: #fff;
+    font-size: 1.5rem; cursor: pointer;
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .nav-btn:hover { background: rgba(255,255,255,0.15); transform: scale(1.15); }
+  #slide-counter {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.8rem;
+    color: var(--green);
+    min-width: 60px; text-align: center;
+  }
+  .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: rgba(255,255,255,0.25);
+    cursor: pointer;
+    transition: background 0.3s, transform 0.3s;
+  }
+  .dot.active { background: var(--green); transform: scale(1.4); }
+
+  /* ── KEYBOARD HINT ── */
+  #hint {
+    position: fixed; top: 1.2rem; right: 1.5rem;
+    font-size: 0.72rem; color: rgba(255,255,255,0.3);
+    z-index: 100;
+  }
+
+  /* ══════════════════════════════════════════
+     SLIDE 1 – HERO
+  ══════════════════════════════════════════ */
+  #s1 { background: radial-gradient(ellipse at 30% 60%, #003322 0%, #000d08 70%); }
+  #s1 .earth-wrap {
+    position: relative;
+    width: 260px; height: 260px;
+    margin-bottom: 2rem;
+  }
+  #s1 .earth {
+    width: 260px; height: 260px;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 30% 35%, #1a5c2e 15%, transparent 40%),
+      radial-gradient(circle at 65% 55%, #1a5c2e 20%, transparent 45%),
+      radial-gradient(circle at 50% 75%, #1a5c2e 12%, transparent 35%),
+      linear-gradient(135deg, #0077b6 0%, #023e8a 60%, #001233 100%);
+    box-shadow: 0 0 80px #00e67644, 0 0 200px #00bcd422, inset -30px -20px 60px rgba(0,0,0,0.5);
+    animation: spin 18s linear infinite;
+    position: relative; z-index: 2;
+  }
+  @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  #s1 .orbit {
+    position: absolute; inset: -30px;
+    border: 2px dashed rgba(0,230,118,0.25);
+    border-radius: 50%;
+    animation: orbit-spin 8s linear infinite;
+  }
+  #s1 .sat {
+    position: absolute; top: 0; left: 50%;
+    width: 18px; height: 18px;
+    background: var(--green);
+    border-radius: 3px;
+    transform: translateX(-50%) translateY(-9px);
+    box-shadow: var(--glow-green);
+  }
+  @keyframes orbit-spin { from { transform: rotate(0deg); } to { transform: rotate(-360deg); } }
+
+  .hero-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(2.2rem, 5vw, 4rem);
+    font-weight: 900;
+    letter-spacing: 0.06em;
+    text-align: center;
+    background: linear-gradient(90deg, #00e676 0%, #00bcd4 50%, #76ff03 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.1;
+    filter: drop-shadow(0 0 20px #00e67655);
+    animation: pulse-glow 3s ease-in-out infinite alternate;
+  }
+  @keyframes pulse-glow {
+    from { filter: drop-shadow(0 0 10px #00e67644); }
+    to   { filter: drop-shadow(0 0 35px #00e676aa); }
+  }
+  .hero-sub {
+    font-size: 1.15rem;
+    color: rgba(255,255,255,0.6);
+    margin-top: 0.8rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 700;
+    text-align: center;
+  }
+  .hero-cta {
+    margin-top: 2rem;
+    background: linear-gradient(135deg, var(--green), #00bcd4);
+    color: #000;
+    border: none;
+    border-radius: 50px;
+    padding: 0.85rem 2.5rem;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    box-shadow: 0 0 30px #00e67666;
+    transition: transform 0.2s, box-shadow 0.2s;
+    animation: bounce-cta 2s ease-in-out infinite;
+  }
+  .hero-cta:hover { transform: scale(1.08); box-shadow: 0 0 50px #00e676aa; }
+  @keyframes bounce-cta {
+    0%,100% { transform: translateY(0); }
+    50%     { transform: translateY(-6px); }
+  }
+  .alert-badge {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: rgba(255,23,68,0.2);
+    border: 1px solid var(--red);
+    border-radius: 50px;
+    padding: 0.35rem 1rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #ff6b6b;
+    letter-spacing: 0.05em;
+    margin-bottom: 1rem;
+    animation: blink-badge 1.5s ease-in-out infinite alternate;
+  }
+  @keyframes blink-badge {
+    from { opacity: 0.7; } to { opacity: 1; }
+  }
+
+  /* ══════════════════════════════════════════
+     SLIDE 2 – SAVING WATER & ENERGY
+  ══════════════════════════════════════════ */
+  #s2 { background: radial-gradient(ellipse at 70% 30%, #001f3f 0%, #000b15 80%); }
+  .s2-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.2rem;
+    width: 100%; max-width: 900px;
+    margin-top: 1.2rem;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 20px;
+    padding: 1.4rem;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s, border-color 0.3s;
+    cursor: default;
+  }
+  .card::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.04) 0%, transparent 100%);
+    pointer-events: none;
+  }
+  .card:hover { transform: translateY(-5px); border-color: rgba(255,255,255,0.25); }
+  .card.water { border-top: 3px solid var(--blue); }
+  .card.energy { border-top: 3px solid var(--yellow); }
+  .card-icon { font-size: 2.5rem; margin-bottom: 0.5rem; display: block; }
+  .card-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.9rem; font-weight: 700;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+  }
+  .card.water .card-title { color: var(--blue); }
+  .card.energy .card-title { color: var(--yellow); }
+  .card p { font-size: 0.85rem; line-height: 1.5; color: rgba(255,255,255,0.75); }
+  .stat-pop {
+    display: inline-block;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.4rem; font-weight: 900;
+    color: #fff;
+    text-shadow: var(--glow-green);
+  }
+  .card.water .stat-pop { color: var(--blue); text-shadow: var(--glow-blue); }
+  .card.energy .stat-pop { color: var(--yellow); text-shadow: 0 0 20px #ffeb3b88; }
+
+  /* water fill animation */
+  .water-bar {
+    width: 100%; height: 8px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 50px;
+    margin-top: 0.8rem;
+    overflow: hidden;
+  }
+  .water-fill {
+    height: 100%; border-radius: 50px;
+    background: linear-gradient(90deg, #00bcd4, #0077b6);
+    animation: fill-bar 2.5s ease-out forwards;
+    width: 0;
+  }
+  .energy-fill {
+    background: linear-gradient(90deg, #ffeb3b, #ff9800);
+  }
+  @keyframes fill-bar { from { width: 0; } to { width: var(--w); } }
+
+  .slide-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(1.4rem, 3vw, 2.2rem);
+    font-weight: 900;
+    letter-spacing: 0.06em;
+    text-align: center;
+    margin-bottom: 0.3rem;
+  }
+  .slide-sub {
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.45);
+    text-align: center;
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .divider {
+    width: 80px; height: 3px;
+    border-radius: 50px;
+    margin: 0.4rem auto 0.8rem;
+  }
+  .divider.green { background: linear-gradient(90deg, var(--green), #00bcd4); }
+  .divider.blue  { background: linear-gradient(90deg, var(--blue), #0077b6); }
+  .divider.orange { background: linear-gradient(90deg, var(--orange), var(--yellow)); }
+  .divider.red   { background: linear-gradient(90deg, var(--red), var(--orange)); }
+  .divider.multi { background: linear-gradient(90deg, var(--green), var(--blue), var(--yellow), var(--orange)); }
+
+  /* ══════════════════════════════════════════
+     SLIDE 3 – WASTE & RECYCLING
+  ══════════════════════════════════════════ */
+  #s3 { background: radial-gradient(ellipse at 20% 70%, #0d1a00 0%, #050a00 80%); }
+  .bins-row {
+    display: flex; gap: 1.2rem; margin-top: 1.2rem;
+    flex-wrap: wrap; justify-content: center;
+  }
+  .bin {
+    display: flex; flex-direction: column; align-items: center;
+    width: 140px;
+    animation: bin-appear 0.6s ease-out backwards;
+  }
+  .bin:nth-child(1) { animation-delay: 0.1s; }
+  .bin:nth-child(2) { animation-delay: 0.25s; }
+  .bin:nth-child(3) { animation-delay: 0.4s; }
+  .bin:nth-child(4) { animation-delay: 0.55s; }
+  @keyframes bin-appear {
+    from { opacity: 0; transform: translateY(30px) scale(0.8); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .bin-body {
+    width: 90px; height: 110px;
+    border-radius: 8px 8px 16px 16px;
+    position: relative;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: flex-end;
+    padding-bottom: 8px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+    transition: transform 0.3s;
+    cursor: default;
+  }
+  .bin-body:hover { transform: scale(1.1) rotate(-3deg); }
+  .bin-body.yellow-bin { background: linear-gradient(160deg, #ffd600, #ff8f00); }
+  .bin-body.blue-bin   { background: linear-gradient(160deg, #40c4ff, #0288d1); }
+  .bin-body.green-bin  { background: linear-gradient(160deg, #69f0ae, #00695c); }
+  .bin-body.red-bin    { background: linear-gradient(160deg, #ff5252, #b71c1c); }
+  .bin-icon { font-size: 2.2rem; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4)); }
+  .bin-lid {
+    width: 100px; height: 14px;
+    border-radius: 6px;
+    margin-bottom: 4px;
+  }
+  .yellow-bin .bin-lid { background: #e65100; }
+  .blue-bin .bin-lid   { background: #01579b; }
+  .green-bin .bin-lid  { background: #1b5e20; }
+  .red-bin .bin-lid    { background: #7f0000; }
+  .bin-label {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.65rem; font-weight: 700;
+    text-align: center;
+    margin-top: 0.6rem;
+    color: rgba(255,255,255,0.8);
+    letter-spacing: 0.05em;
+  }
+  .bin-items {
+    font-size: 0.65rem;
+    color: rgba(255,255,255,0.5);
+    text-align: center;
+    margin-top: 0.3rem;
+    line-height: 1.4;
+  }
+  .fact-band {
+    background: rgba(0,230,118,0.1);
+    border: 1px solid rgba(0,230,118,0.3);
+    border-radius: 12px;
+    padding: 0.8rem 1.5rem;
+    margin-top: 1rem;
+    text-align: center;
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.8);
+    max-width: 600px;
+  }
+  .fact-band strong { color: var(--green); }
+
+  /* ══════════════════════════════════════════
+     SLIDE 4 – CLIMATE & NATURE
+  ══════════════════════════════════════════ */
+  #s4 { background: radial-gradient(ellipse at 50% 0%, #1a0a00 0%, #0a0500 80%); }
+  .climate-row {
+    display: flex; gap: 1.2rem; margin-top: 1rem;
+    max-width: 960px; width: 100%;
+    flex-wrap: wrap; justify-content: center;
+  }
+  .climate-card {
+    flex: 1 1 180px;
+    max-width: 210px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 20px;
+    padding: 1.3rem 1rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: default;
+  }
+  .climate-card:hover { transform: translateY(-6px); }
+  .climate-card.cc1 { border-bottom: 3px solid var(--orange); }
+  .climate-card.cc2 { border-bottom: 3px solid var(--red); }
+  .climate-card.cc3 { border-bottom: 3px solid var(--blue); }
+  .climate-card.cc4 { border-bottom: 3px solid var(--green); }
+  .climate-card:hover.cc1 { box-shadow: 0 10px 40px rgba(255,109,0,0.3); }
+  .climate-card:hover.cc2 { box-shadow: 0 10px 40px rgba(255,23,68,0.3); }
+  .climate-card:hover.cc3 { box-shadow: 0 10px 40px rgba(0,188,212,0.3); }
+  .climate-card:hover.cc4 { box-shadow: 0 10px 40px rgba(0,230,118,0.3); }
+  .climate-num {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 2rem; font-weight: 900;
+    line-height: 1;
+    margin-bottom: 0.3rem;
+  }
+  .cc1 .climate-num { color: var(--orange); }
+  .cc2 .climate-num { color: var(--red); }
+  .cc3 .climate-num { color: var(--blue); }
+  .cc4 .climate-num { color: var(--green); }
+  .climate-desc {
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.65);
+    line-height: 1.4;
+    margin-top: 0.3rem;
+  }
+  .climate-icon { font-size: 2rem; margin-bottom: 0.5rem; display: block; }
+  .thermometer {
+    width: 24px; height: 120px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 12px;
+    position: relative;
+    margin: 0 auto 0.5rem;
+    overflow: hidden;
+  }
+  .therm-fill {
+    position: absolute; bottom: 0; width: 100%;
+    background: linear-gradient(0deg, var(--red), var(--orange));
+    border-radius: 12px;
+    animation: therm-rise 2s ease-out forwards;
+    height: 0;
+  }
+  @keyframes therm-rise { from { height: 0; } to { height: var(--h); } }
+
+  /* ══════════════════════════════════════════
+     SLIDE 5 – ACTIONS YOU CAN TAKE
+  ══════════════════════════════════════════ */
+  #s5 { background: radial-gradient(ellipse at 80% 80%, #001a33 0%, #000810 80%); }
+  .actions-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.9rem;
+    max-width: 900px; width: 100%;
+    margin-top: 1rem;
+  }
+  .action-item {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.09);
+    border-radius: 16px;
+    padding: 1rem;
+    display: flex; align-items: flex-start; gap: 0.7rem;
+    transition: transform 0.3s, background 0.3s;
+    cursor: default;
+    animation: action-pop 0.5s ease-out backwards;
+  }
+  .action-item:hover { transform: scale(1.04); background: rgba(255,255,255,0.09); }
+  .action-item:nth-child(1) { animation-delay: 0.1s; }
+  .action-item:nth-child(2) { animation-delay: 0.18s; }
+  .action-item:nth-child(3) { animation-delay: 0.26s; }
+  .action-item:nth-child(4) { animation-delay: 0.34s; }
+  .action-item:nth-child(5) { animation-delay: 0.42s; }
+  .action-item:nth-child(6) { animation-delay: 0.5s; }
+  @keyframes action-pop {
+    from { opacity: 0; transform: scale(0.8); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+  .action-emoji { font-size: 1.8rem; flex-shrink: 0; }
+  .action-text strong {
+    font-size: 0.85rem; display: block; color: var(--green); margin-bottom: 0.2rem;
+    font-weight: 800;
+  }
+  .action-text span { font-size: 0.75rem; color: rgba(255,255,255,0.55); line-height: 1.4; }
+
+  /* ══════════════════════════════════════════
+     SLIDE 6 – MOTIVATIONAL ENDING
+  ══════════════════════════════════════════ */
+  #s6 { background: radial-gradient(ellipse at 50% 50%, #001200 0%, #000800 80%); }
+  .finale-quote {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(1.3rem, 3.5vw, 2.5rem);
+    font-weight: 900;
+    text-align: center;
+    max-width: 800px;
+    line-height: 1.3;
+    background: linear-gradient(90deg, #00e676, #00bcd4, #69f0ae, #b2ff59);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 0 30px #00e67655);
+    animation: glow-cycle 4s ease-in-out infinite alternate;
+    margin-bottom: 1.5rem;
+  }
+  @keyframes glow-cycle {
+    from { filter: drop-shadow(0 0 15px #00e67644); }
+    to   { filter: drop-shadow(0 0 40px #00e676bb); }
+  }
+  .pledge-cards {
+    display: flex; gap: 1rem; margin-top: 0.5rem;
+    flex-wrap: wrap; justify-content: center; max-width: 800px;
+  }
+  .pledge {
+    background: rgba(0,230,118,0.1);
+    border: 1px solid rgba(0,230,118,0.3);
+    border-radius: 12px;
+    padding: 0.7rem 1.2rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #fff;
+    display: flex; align-items: center; gap: 0.5rem;
+    transition: transform 0.3s, background 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+  }
+  .pledge:hover {
+    transform: scale(1.07);
+    background: rgba(0,230,118,0.2);
+    box-shadow: 0 0 20px #00e67644;
+  }
+  .pledge.checked { background: rgba(0,230,118,0.35); border-color: var(--green); }
+  .pledge .check { font-size: 1.2rem; }
+  .finale-sub {
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.4);
+    margin-top: 1.5rem;
+    text-align: center;
+    letter-spacing: 0.05em;
+  }
+  .counter-ring {
+    display: flex; gap: 2rem; margin-top: 1rem;
+  }
+  .ring-item { text-align: center; }
+  .ring-num {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.8rem; font-weight: 900;
+    color: var(--green);
+  }
+  .ring-label { font-size: 0.7rem; color: rgba(255,255,255,0.4); margin-top: 0.2rem; }
+
+  /* ══════════════════════════════════════════
+     SLIDE 7 – QUIZ
+  ══════════════════════════════════════════ */
+  #s7 { background: radial-gradient(ellipse at 60% 40%, #0d001a 0%, #04000a 80%); }
+  .quiz-box {
+    max-width: 700px; width: 100%;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 24px;
+    padding: 2rem;
+    margin-top: 1rem;
+  }
+  .quiz-q {
+    font-size: 1.1rem; font-weight: 800;
+    margin-bottom: 1.2rem;
+    color: #fff;
+    line-height: 1.4;
+  }
+  .quiz-q span { color: var(--yellow); }
+  .quiz-options { display: flex; flex-direction: column; gap: 0.7rem; }
+  .qopt {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    padding: 0.8rem 1.2rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.25s;
+    font-weight: 600;
+    display: flex; align-items: center; gap: 0.7rem;
+  }
+  .qopt:hover { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.25); }
+  .qopt.correct { background: rgba(0,230,118,0.2); border-color: var(--green); color: var(--green); }
+  .qopt.wrong   { background: rgba(255,23,68,0.2); border-color: var(--red); color: #ff6b6b; }
+  .quiz-feedback {
+    margin-top: 1rem; font-size: 0.9rem; font-weight: 700; min-height: 1.2rem;
+    text-align: center;
+  }
+  .quiz-nav-row { display: flex; justify-content: space-between; align-items: center; margin-top: 1.2rem; }
+  .quiz-score { font-family: 'Orbitron', sans-serif; font-size: 1rem; color: var(--yellow); }
+  .quiz-next {
+    background: linear-gradient(135deg, var(--green), #00bcd4);
+    color: #000; border: none; border-radius: 50px;
+    padding: 0.5rem 1.5rem; font-family: 'Orbitron', sans-serif;
+    font-size: 0.8rem; font-weight: 700; cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    letter-spacing: 0.05em;
+  }
+  .quiz-next:hover { transform: scale(1.08); box-shadow: 0 0 20px #00e67666; }
+
+  /* ── PROGRESS BAR ── */
+  #progress {
+    position: fixed; top: 0; left: 0; height: 3px;
+    background: linear-gradient(90deg, var(--green), #00bcd4);
+    transition: width 0.5s ease;
+    z-index: 200;
+    box-shadow: 0 0 10px #00e67688;
+  }
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+<div id="particles"></div>
+<div id="hint">← → Arrow keys to navigate</div>
+
+<!-- ═══════════════════════════════════
+     SLIDE 1: HERO
+═══════════════════════════════════ -->
+<div id="slides">
+<div class="slide active" id="s1">
+  <div class="alert-badge"><i class="fas fa-exclamation-triangle"></i> URGENT MESSAGE FOR PLANET EARTH</div>
+  <div id="s1" class="earth-wrap">
+    <div class="orbit"><div class="sat"></div></div>
+    <div class="earth"></div>
+  </div>
+  <div class="hero-title">PROTECT<br>THE EARTH</div>
+  <div class="hero-sub">Our Planet. Our Mission. Our Future.</div>
+  <button class="hero-cta" onclick="goTo(1)">START THE MISSION →</button>
+</div>
+
+<!-- ═══════════════════════════════════
+     SLIDE 2: WATER & ENERGY
+═══════════════════════════════════ -->
+<div class="slide" id="s2">
+  <div class="slide-title" style="color:#00bcd4;"><i class="fas fa-tint"></i> SAVE WATER & <i class="fas fa-bolt"></i> ENERGY</div>
+  <div class="slide-sub">Every Drop. Every Watt. Counts.</div>
+  <div class="divider blue"></div>
+  <div class="s2-grid">
+    <div class="card water">
+      <span class="card-icon"><i class="fas fa-shower"></i></span>
+      <div class="card-title">SHOCKING WATER FACT</div>
+      <p>Only <span class="stat-pop">2.5%</span> of Earth's water is fresh — and most is frozen. A 5-minute shower uses <span class="stat-pop">60L</span> of water. Turning off the tap while brushing teeth saves <span class="stat-pop">8L per minute</span>!</p>
+      <div class="water-bar"><div class="water-fill" style="--w:70%"></div></div>
+    </div>
+    <div class="card energy">
+      <span class="card-icon"><i class="fas fa-lightbulb"></i></span>
+      <div class="card-title">ENERGY ALERT</div>
+      <p>A single LED bulb uses <span class="stat-pop">80%</span> less energy than an old bulb. Leaving devices on standby wastes <span class="stat-pop">€100+/year</span> per household. Unplug. Switch off. Save the future!</p>
+      <div class="water-bar"><div class="water-fill energy-fill" style="--w:55%"></div></div>
+    </div>
+    <div class="card water">
+      <span class="card-icon"><i class="fas fa-water"></i></span>
+      <div class="card-title">DID YOU KNOW?</div>
+      <p>Over <span class="stat-pop">785 million</span> people have no access to clean water. Fixing a dripping tap saves up to <span class="stat-pop">20,000L</span> per year — that's a swimming pool!</p>
+      <div class="water-bar"><div class="water-fill" style="--w:85%"></div></div>
+    </div>
+    <div class="card energy">
+      <span class="card-icon"><i class="fas fa-sun"></i></span>
+      <div class="card-title">SOLAR POWER RISING</div>
+      <p>The sun delivers more energy in <span class="stat-pop">1 hour</span> than humanity uses in a whole year. Solar energy is growing by <span class="stat-pop">25%</span> annually. Renewables are the future — and the future is NOW.</p>
+      <div class="water-bar"><div class="water-fill energy-fill" style="--w:40%"></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     SLIDE 3: WASTE & RECYCLING
+═══════════════════════════════════ -->
+<div class="slide" id="s3">
+  <div class="slide-title" style="color:var(--green);"><i class="fas fa-recycle"></i> WASTE SEGREGATION & RECYCLING</div>
+  <div class="slide-sub">Sort it. Save it. Regenerate it.</div>
+  <div class="divider orange"></div>
+  <div class="bins-row">
+    <div class="bin">
+      <div class="bin-body yellow-bin"><div class="bin-lid"></div><div class="bin-icon"><i class="fas fa-box"></i></div></div>
+      <div class="bin-label">YELLOW BIN</div>
+      <div class="bin-items">Plastic · Metal<br>Cans · Foil</div>
+    </div>
+    <div class="bin">
+      <div class="bin-body blue-bin"><div class="bin-lid"></div><div class="bin-icon"><i class="fas fa-file-alt"></i></div></div>
+      <div class="bin-label">BLUE BIN</div>
+      <div class="bin-items">Paper · Cardboard<br>Books · Magazines</div>
+    </div>
+    <div class="bin">
+      <div class="bin-body green-bin"><div class="bin-lid"></div><div class="bin-icon"><i class="fas fa-leaf"></i></div></div>
+      <div class="bin-label">GREEN BIN</div>
+      <div class="bin-items">Glass<br>Jars · Bottles</div>
+    </div>
+    <div class="bin">
+      <div class="bin-body red-bin"><div class="bin-lid"></div><div class="bin-icon"><i class="fas fa-biohazard"></i></div></div>
+      <div class="bin-label">RED / GREY BIN</div>
+      <div class="bin-items">Mixed waste<br>Non-recyclable</div>
+    </div>
+  </div>
+  <div class="fact-band">
+    <i class="fas fa-globe"></i> <strong>1 recycled aluminium can</strong> saves enough energy to run a TV for 3 hours! &nbsp;|&nbsp;
+    <i class="fas fa-wine-bottle"></i> A plastic bottle takes <strong>450 YEARS</strong> to decompose! &nbsp;|&nbsp;
+    <i class="fas fa-box"></i> Recycling 1 tonne of paper saves <strong>17 trees</strong>!
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     SLIDE 4: CLIMATE & NATURE
+═══════════════════════════════════ -->
+<div class="slide" id="s4">
+  <div class="slide-title" style="color:var(--orange);"><i class="fas fa-temperature-high"></i> CLIMATE & NATURE IN DANGER</div>
+  <div class="slide-sub">The planet is sending an SOS. Are you listening?</div>
+  <div class="divider red"></div>
+  <div class="climate-row">
+    <div class="climate-card cc1">
+      <span class="climate-icon"><i class="fas fa-thermometer-half"></i></span>
+      <div class="thermometer"><div class="therm-fill" style="--h:75%"></div></div>
+      <div class="climate-num">+1.2°C</div>
+      <div class="climate-desc">Earth has already warmed by 1.2°C since pre-industrial times. Scientists warn we must stay below 1.5°C.</div>
+    </div>
+    <div class="climate-card cc2">
+      <span class="climate-icon"><i class="fas fa-elephant"></i></span>
+      <div class="climate-num">1 Million</div>
+      <div class="climate-desc">Species are at risk of extinction due to human activity — that's more than ever before in human history.</div>
+    </div>
+    <div class="climate-card cc3">
+      <span class="climate-icon"><i class="fas fa-water"></i></span>
+      <div class="climate-num">3.6mm/yr</div>
+      <div class="climate-desc">Sea levels rise by 3.6 mm every year. By 2100, entire coastal cities could be submerged.</div>
+    </div>
+    <div class="climate-card cc4">
+      <span class="climate-icon"><i class="fas fa-tree"></i></span>
+      <div class="climate-num">15 Billion</div>
+      <div class="climate-desc">Trees are cut down every single year. That's 15 billion trees — about 46% of the world's forests gone since humans appeared.</div>
+    </div>
+  </div>
+  <div class="fact-band" style="margin-top:1rem;">
+    <i class="fas fa-fire"></i> The last <strong>10 years</strong> were the hottest ever recorded on Earth. Climate change is NOT the future — it's <strong>happening right now.</strong>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     SLIDE 5: ACTIONS YOU CAN TAKE
+═══════════════════════════════════ -->
+<div class="slide" id="s5">
+  <div class="slide-title" style="color:var(--green);"><i class="fas fa-bolt"></i> ACTIONS YOU CAN TAKE TODAY</div>
+  <div class="slide-sub">You are 14–15 years old. You already have the power to change the world.</div>
+  <div class="divider green"></div>
+  <div class="actions-grid">
+    <div class="action-item">
+      <div class="action-emoji"><i class="fas fa-shower"></i></div>
+      <div class="action-text">
+        <strong>Shorter Showers</strong>
+        <span>Cut your shower to 4 minutes. Save 200L+ every week!</span>
+      </div>
+    </div>
+    <div class="action-item">
+      <div class="action-emoji"><i class="fas fa-lightbulb"></i></div>
+      <div class="action-text">
+        <strong>Lights Out!</strong>
+        <span>Switch off lights and unplug chargers when not in use.</span>
+      </div>
+    </div>
+    <div class="action-item">
+      <div class="action-emoji"><i class="fas fa-bicycle"></i></div>
+      <div class="action-text">
+        <strong>Walk or Bike</strong>
+        <span>Skip the car for short trips. Zero emissions = pure win.</span>
+      </div>
+    </div>
+    <div class="action-item">
+      <div class="action-emoji"><i class="fas fa-carrot"></i></div>
+      <div class="action-text">
+        <strong>Eat More Plants</strong>
+        <span>Meat production creates 14.5% of global greenhouse gases. One veggie day a week helps!</span>
+      </div>
+    </div>
+    <div class="action-item">
+      <div class="action-emoji"><i class="fas fa-recycle"></i></div>
+      <div class="action-text">
+        <strong>Sort Your Waste</strong>
+        <span>Use the right bin every single time. Teach your family too.</span>
+      </div>
+    </div>
+    <div class="action-item">
+      <div class="action-emoji"><i class="fas fa-seedling"></i></div>
+      <div class="action-text">
+        <strong>Plant Something</strong>
+        <span>A tree, a flower, a herb on the windowsill. Every green life matters.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     SLIDE 6: MOTIVATIONAL ENDING
+═══════════════════════════════════ -->
+<div class="slide" id="s6">
+  <div class="finale-quote">"WE DO NOT INHERIT THE EARTH FROM OUR ANCESTORS — WE BORROW IT FROM OUR CHILDREN."</div>
+  <div class="counter-ring">
+    <div class="ring-item"><div class="ring-num" id="cnt-trees">0</div><div class="ring-label">Trees logged since you opened this presentation</div></div>
+    <div class="ring-item"><div class="ring-num" id="cnt-co2">0</div><div class="ring-label">Tonnes of CO₂ emitted (in millions)</div></div>
+    <div class="ring-item"><div class="ring-num" id="cnt-plastic">0</div><div class="ring-label">Plastic bottles produced</div></div>
+  </div>
+  <div style="font-size:0.75rem;color:rgba(255,255,255,0.25);margin-top:0.3rem;text-align:center;">↑ Real-time estimates based on global averages since you opened this slide</div>
+  <div class="pledge-cards">
+    <div class="pledge" onclick="this.classList.toggle('checked');this.querySelector('.check').innerHTML=this.classList.contains('checked')?'<i class=\"fas fa-check-square\"></i>':'<i class=\"fas fa-square\"></i>'">
+      <span class="check"><i class="fas fa-square"></i></span> I will use reusable bags
+    </div>
+    <div class="pledge" onclick="this.classList.toggle('checked');this.querySelector('.check').innerHTML=this.classList.contains('checked')?'<i class=\"fas fa-check-square\"></i>':'<i class=\"fas fa-square\"></i>'">
+      <span class="check"><i class="fas fa-square"></i></span> I will sort my waste
+    </div>
+    <div class="pledge" onclick="this.classList.toggle('checked');this.querySelector('.check').innerHTML=this.classList.contains('checked')?'<i class=\"fas fa-check-square\"></i>':'<i class=\"fas fa-square\"></i>'">
+      <span class="check"><i class="fas fa-square"></i></span> I will save water daily
+    </div>
+    <div class="pledge" onclick="this.classList.toggle('checked');this.querySelector('.check').innerHTML=this.classList.contains('checked')?'<i class=\"fas fa-check-square\"></i>':'<i class=\"fas fa-square\"></i>'">
+      <span class="check"><i class="fas fa-square"></i></span> I will talk about climate with friends
+    </div>
+    <div class="pledge" onclick="this.classList.toggle('checked');this.querySelector('.check').innerHTML=this.classList.contains('checked')?'<i class=\"fas fa-check-square\"></i>':'<i class=\"fas fa-square\"></i>'">
+      <span class="check"><i class="fas fa-square"></i></span> I will plant a tree or flower
+    </div>
+  </div>
+  <div class="finale-sub">Click each pledge to make your commitment <i class="fas fa-globe"></i></div>
+</div>
+
+<!-- ═══════════════════════════════════
+     SLIDE 7: QUIZ
+═══════════════════════════════════ -->
+<div class="slide" id="s7">
+  <div class="slide-title" style="color:var(--yellow);"><i class="fas fa-brain"></i> ECO QUIZ — TEST YOUR KNOWLEDGE!</div>
+  <div class="slide-sub">How much did you learn? Let's find out!</div>
+  <div class="divider multi"></div>
+  <div class="quiz-box">
+    <div class="quiz-q" id="qtext">Loading question...</div>
+    <div class="quiz-options" id="qopts"></div>
+    <div class="quiz-feedback" id="qfeedback"></div>
+    <div class="quiz-nav-row">
+      <div class="quiz-score">Score: <span id="qscore">0</span> / <span id="qtotal">0</span></div>
+      <button class="quiz-next" id="qnext" onclick="nextQ()" style="display:none;">NEXT QUESTION →</button>
+    </div>
+  </div>
+</div>
+
+</div><!-- /slides -->
+
+<!-- ── NAVIGATION ── -->
+<div id="nav">
+  <button class="nav-btn" onclick="prevSlide()">◀</button>
+  <div id="dots"></div>
+  <div id="slide-counter">1 / 7</div>
+  <button class="nav-btn" onclick="nextSlide()">▶</button>
+</div>
+
+<script>
+/* ═══════════════════════════════════
+   PARTICLES
+═══════════════════════════════════ */
+(function(){
+  const pc = document.getElementById('particles');
+  const colors = ['#00e676','#00bcd4','#76ff03','#b2ff59','#69f0ae','#40c4ff','#ffeb3b'];
+  for(let i=0;i<50;i++){
+    const p = document.createElement('div');
+    p.className='particle';
+    const s = Math.random()*6+2;
+    p.style.cssText=`
+      width:${s}px;height:${s}px;
+      left:${Math.random()*100}%;
+      background:${colors[Math.floor(Math.random()*colors.length)]};
+      animation-duration:${Math.random()*15+10}s;
+      animation-delay:${Math.random()*15}s;
+      box-shadow:0 0 ${s*2}px currentColor;
+    `;
+    pc.appendChild(p);
+  }
+})();
+
+/* ═══════════════════════════════════
+   SLIDE ENGINE
+═══════════════════════════════════ */
+const TOTAL = 7;
+let current = 0;
+
+const slides = document.querySelectorAll('.slide');
+const dotsEl = document.getElementById('dots');
+const counter = document.getElementById('slide-counter');
+const progress = document.getElementById('progress');
+
+// Build dots
+for(let i=0;i<TOTAL;i++){
+  const d=document.createElement('div');
+  d.className='dot'+(i===0?' active':'');
+  d.onclick=()=>goTo(i);
+  dotsEl.appendChild(d);
+}
+
+function goTo(n){
+  slides[current].classList.remove('active');
+  dotsEl.children[current].classList.remove('active');
+  current=Math.max(0,Math.min(TOTAL-1,n));
+  slides[current].classList.add('active');
+  dotsEl.children[current].classList.add('active');
+  counter.textContent=`${current+1} / ${TOTAL}`;
+  progress.style.width=`${((current+1)/TOTAL)*100}%`;
+  if(current===5) startCounters();
+  if(current===6) initQuiz();
+}
+function nextSlide(){ goTo(current+1); }
+function prevSlide(){ goTo(current-1); }
+
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key==='ArrowDown') nextSlide();
+  if(e.key==='ArrowLeft'||e.key==='ArrowUp') prevSlide();
+});
+
+/* ═══════════════════════════════════
+   LIVE COUNTERS (Slide 6)
+═══════════════════════════════════ */
+let counterStart = null;
+let counterInterval = null;
+function startCounters(){
+  if(counterInterval) return;
+  counterStart = Date.now();
+  // Trees: ~15 billion/year = ~475/sec
+  // CO2: ~37 billion tonnes/year = ~1172 tonnes/sec → show millions → ~0.00117/sec
+  // Plastic bottles: ~1 million/min = ~16667/sec
+  counterInterval = setInterval(()=>{
+    const sec = (Date.now()-counterStart)/1000;
+    document.getElementById('cnt-trees').textContent=Math.floor(475*sec).toLocaleString();
+    document.getElementById('cnt-co2').textContent=(0.00117*sec).toFixed(4);
+    document.getElementById('cnt-plastic').textContent=Math.floor(16667*sec).toLocaleString();
+  },50);
+}
+
+/* ═══════════════════════════════════
+   QUIZ (Slide 7)
+═══════════════════════════════════ */
+const questions=[
+  {
+    q:"How much of Earth's water is freshwater available for humans to use?",
+    opts:["About 70%","About 10%","Less than 1%","About 25%"],
+    ans:2,
+    exp:"Only ~0.3% of all Earth's water is accessible fresh water — the rest is salty or frozen!"
+  },
+  {
+    q:"How long does a plastic bottle take to decompose in nature?",
+    opts:["10 years","50 years","200 years","450 years"],
+    ans:3,
+    exp:"A plastic bottle takes approximately 450 years to break down — it outlives many generations!"
+  },
+  {
+    q:"Which bin should you use for paper and cardboard?",
+    opts:["Yellow bin","Green bin","Blue bin","Red bin"],
+    ans:2,
+    exp:"Paper and cardboard go in the BLUE bin for recycling!"
+  },
+  {
+    q:"By how much has Earth's average temperature risen since pre-industrial times?",
+    opts:["0.2°C","1.2°C","3.5°C","5°C"],
+    ans:1,
+    exp:"Earth has warmed by approximately 1.2°C already, and every fraction of a degree matters!"
+  },
+  {
+    q:"What percentage of energy does an LED bulb save compared to an old incandescent bulb?",
+    opts:["20%","50%","80%","95%"],
+    ans:2,
+    exp:"LED bulbs use up to 80% less energy and last 25 times longer — a no-brainer switch!"
+  }
+];
+
+let qIdx=0, score=0, answered=false;
+function initQuiz(){
+  qIdx=0; score=0; answered=false;
+  renderQ();
+}
+function renderQ(){
+  if(qIdx>=questions.length){
+    document.getElementById('qtext').innerHTML=`<i class="fas fa-trophy"></i> Quiz Complete! You scored <span>${score}/${questions.length}</span>`;
+    document.getElementById('qopts').innerHTML='';
+    document.getElementById('qfeedback').innerHTML=score===questions.length?'<i class="fas fa-star"></i> PERFECT! You\'re an Eco Champion!':score>=3?'<i class="fas fa-leaf"></i> Great job! Keep learning about our planet!':'<i class="fas fa-seedling"></i> Keep going — every bit of knowledge helps!';
+    document.getElementById('qnext').style.display='none';
+    document.getElementById('qscore').textContent=score;
+    document.getElementById('qtotal').textContent=questions.length;
+    return;
+  }
+  answered=false;
+  const q=questions[qIdx];
+  document.getElementById('qtext').innerHTML=`Q${qIdx+1}: ${q.q}`;
+  document.getElementById('qfeedback').textContent='';
+  document.getElementById('qnext').style.display='none';
+  document.getElementById('qscore').textContent=score;
+  document.getElementById('qtotal').textContent=questions.length;
+  const optsEl=document.getElementById('qopts');
+  optsEl.innerHTML='';
+  q.opts.forEach((o,i)=>{
+    const btn=document.createElement('div');
+    btn.className='qopt';
+    btn.innerHTML=`<span>${['A','B','C','D'][i]}</span> ${o}`;
+    btn.onclick=()=>answerQ(i,btn);
+    optsEl.appendChild(btn);
+  });
+}
+function answerQ(i,btn){
+  if(answered)return;
+  answered=true;
+  const q=questions[qIdx];
+  const opts=document.querySelectorAll('.qopt');
+  opts[q.ans].classList.add('correct');
+  const fb=document.getElementById('qfeedback');
+  if(i===q.ans){
+    score++;
+    fb.innerHTML='<span style="color:var(--green)"><i class="fas fa-check-circle"></i> Correct! </span>'+q.exp;
+  } else {
+    btn.classList.add('wrong');
+    fb.innerHTML='<span style="color:var(--red)"><i class="fas fa-times-circle"></i> Not quite! </span>'+q.exp;
+  }
+  document.getElementById('qnext').style.display='inline-block';
+}
+function nextQ(){
+  qIdx++;
+  renderQ();
+}
+
+// Init quiz on load for slide 7 when navigated
+initQuiz();
+</script>
+</body>
+</html>
